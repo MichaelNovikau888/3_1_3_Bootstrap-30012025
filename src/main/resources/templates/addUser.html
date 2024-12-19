@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+  <title>Add User</title>
+</head>
+<body>
+<h1>Add User</h1>
+<form th:action="@{/admin/addUser}" th:object="${user}" method="post">
+  <label>Username:</label>
+  <input type="text" th:field="*{username}"/><br/>
+  <label>Password:</label>
+  <input type="password" th:field="*{password}"/><br/>
+  <label>Roles:</label>
+  <select th:field="*{roles}" multiple="multiple">
+    <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+  </select><br/>
+  <input type="submit" value="Add"/>
+</form>
+</body>
+</html>
