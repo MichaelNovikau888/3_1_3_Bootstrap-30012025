@@ -2,28 +2,61 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Spring Security Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .table-container {
+            width: 600px;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
 <h1>Admin, welcome spring boot security page!</h1>
 <a href="/logout">Logout</a>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Roles</th>
-        <th>Actions</th>
-    </tr>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}"></td>
-        <td th:text="${user.username}"></td>
-        <td>
-            <span th:each="role : ${user.roles}" th:text="${role.name}"></span>
-        </td>
-        <td>
-            <a th:href="@{/admin/editUser(id=${user.id})}">Edit</a>
-            <a th:href="@{/admin/deleteUser(id=${user.id})}">Delete</a>
-        </td>
-    </tr>
-</table>
+<div class="table-container">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.surname}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.age}"></td>
+            <td>
+                <span th:each="role : ${user.roles}" th:text="${role.name}"></span>
+            </td>
+            <td>
+                <a th:href="@{/admin/editUser(id=${user.id})}">Edit</a>
+                <a th:href="@{/admin/deleteUser(id=${user.id})}">Delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

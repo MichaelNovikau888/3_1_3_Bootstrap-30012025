@@ -2,19 +2,62 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
   <title>Add User</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .form-container {
+      width: 300px;
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+    }
+    input[type="submit"] {
+      width: auto;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
 <h1>Add User</h1>
-<form th:action="@{/admin/addUser}" th:object="${user}" method="post">
-  <label>Username:</label>
-  <input type="text" th:field="*{username}"/><br/>
-  <label>Password:</label>
-  <input type="password" th:field="*{password}"/><br/>
-  <label>Roles:</label>
-  <select th:field="*{roles}" multiple="multiple">
-    <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
-  </select><br/>
-  <input type="submit" value="Add"/>
-</form>
+<div class="form-container">
+  <form th:action="@{/admin/addUser}" th:object="${user}" method="post">
+    <label>Username:</label>
+    <input type="text" th:field="*{username}"/>
+    <label>Surname:</label>
+    <input type="text" th:field="*{surname}"/>
+    <label>Email:</label>
+    <input type="email" th:field="*{email}"/>
+    <label>Age:</label>
+    <input type="number" th:field="*{age}"/>
+    <label>Password:</label>
+    <input type="password" th:field="*{password}"/>
+    <label>Roles:</label>
+    <select th:field="*{roles}" multiple="multiple">
+      <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+    </select>
+    <input type="submit" value="Add"/>
+  </form>
+</div>
 </body>
 </html>
