@@ -1,43 +1,103 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .user-info {
-            width: 300px;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-        }
-    </style>
+  <title>User Page</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    .navbar-dark-bg {
+      background-color: #343a40; /* Более тёмный фон */
+      color: white;
+    }
+    .navbar-text {
+      margin-right: 15px;
+    }
+    .logout-link {
+      color: #d6d6d6; /* Светло-серый цвет текста */
+      text-decoration: none; /* Убираем подчёркивание */
+      font-weight: bold; /* Жирный текст */
+    }
+    .logout-link:hover {
+      color: white; /* Белый цвет текста при наведении */
+      text-decoration: underline; /* Подчёркивание при наведении */
+    }
+    .sidebar {
+      background-color: #ffffff; /* Белый фон для боковой панели */
+      height: 100%;
+      min-height: 100vh;
+      padding: 0; /* Убираем отступы у боковой панели */
+    }
+    .sidebar-item {
+      font-size: 1.2rem; /* Размер шрифта */
+      font-weight: bold; /* Жирный текст */
+      text-align: left; /* Выравнивание текста по левому краю */
+      padding: 10px 15px; /* Отступы внутри элемента */
+      color: black; /* Чёрный цвет текста */
+    }
+    .sidebar-item.active {
+      background-color: #007bff; /* Синий фон для активного элемента */
+      color: black; /* Чёрный текст для активного элемента */
+    }
+    .content-area {
+      background-color: #f8f9fa; /* Светло-серый фон для содержимого справа */
+      min-height: 100vh; /* Высота содержимого, чтобы покрывала всю страницу */
+      padding: 20px; /* Отступы внутри содержимого */
+    }
+  </style>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
-<a href="/logout">Logout</a>
-<div class="user-info">
-    <label>Username:</label>
-    <input type="text" th:value="${user.username}" readonly/>
-    <label>Surname:</label>
-    <input type="text" th:value="${user.surname}" readonly/>
-    <label>Email:</label>
-    <input type="email" th:value="${user.email}" readonly/>
-    <label>Age:</label>
-    <input type="number" th:value="${user.age}" readonly/>
+<nav class="navbar navbar-expand-lg navbar-dark-bg">
+  <div class="container-fluid">
+    <span class="navbar-text text-white">
+      <span th:text="${authenticatedEmail}">[email]</span> with roles:
+      <span th:each="role, stat : ${authenticatedRoles}" th:text="${stat.index > 0 ? ', ' + role : role}"></span>
+    </span>
+    <a class="logout-link" href="/logout">Logout</a>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Левая колонка -->
+    <div class="col-2 sidebar">
+      <div class="sidebar-item active">User</div>
+    </div>
+
+    <!-- Основное содержимое -->
+    <div class="col-10 content-area">
+      <h1>User Information Page</h1>
+      <h2>About User</h2>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Email</th>
+          <th>Role</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td th:text="${user.id}"></td>
+          <td th:text="${user.name}"></td>
+          <td th:text="${user.surname}"></td>
+          <td th:text="${user.age}"></td>
+          <td th:text="${user.username}"></td>
+          <td>
+            <span th:each="role : ${user.roles}" th:text="${role.name}"></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

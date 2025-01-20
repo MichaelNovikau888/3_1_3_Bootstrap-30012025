@@ -1,62 +1,312 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .table-container {
-            width: 600px;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+  <title>Admin Page</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+  <style>
+    .navbar-dark-bg {
+      background-color: #343a40; /* Более тёмный фон */
+      color: white;
+    }
+    .navbar-text {
+      margin-right: 15px;
+    }
+    .logout-link {
+      color: #d6d6d6; /* Светло-серый цвет текста */
+      text-decoration: none; /* Убираем подчёркивание */
+      font-weight: bold; /* Жирный текст */
+    }
+    .logout-link:hover {
+      color: white; /* Белый цвет текста при наведении */
+      text-decoration: underline; /* Подчёркивание при наведении */
+    }
+    .sidebar {
+      background-color: #ffffff; /* Белый фон для боковой панели */
+      height: 100%;
+      min-height: 100vh;
+      padding: 0; /* Убираем отступы у боковой панели */
+    }
+    .sidebar-item {
+      display: block; /* Делаем ссылки блочными */
+      width: 100%; /* Растягиваем на всю ширину боковой панели */
+      padding: 10px 15px; /* Отступы внутри */
+      text-align: left; /* Выравниваем текст по левому краю */
+      color: black; /* Чёрный текст по умолчанию */
+      text-decoration: none; /* Убираем подчёркивание */
+    }
+    .sidebar-item.active {
+      background-color: #007bff; /* Синий фон для активного элемента */
+      color: white; /* Белый текст для активного элемента */
+    }
+    .content-area {
+      background-color: #f8f9fa; /* Светло-серый фон для содержимого справа */
+      min-height: 100vh; /* Высота содержимого, чтобы покрывала всю страницу */
+      padding: 20px; /* Отступы внутри содержимого */
+    }
+    .content-container {
+      margin-left: 0.5cm; /* Уменьшенный отступ от левой колонки */
+      margin-right: 0.5cm; /* Уменьшенный отступ от правого края страницы */
+    }
+    .table {
+      width: 100%; /* Растягиваем таблицу на всю доступную ширину */
+    }
+    .table th:nth-child(4),
+    .table td:nth-child(4) {
+      width: 5%; /* Колонка Age уменьшена вдвое */
+    }
+    .table th:nth-child(5),
+    .table td:nth-child(5) {
+      width: 30%; /* Колонка Email увеличена */
+    }
+    .form-group {
+      width: 25%; /* Уменьшаем ширину полей ввода в 4 раза */
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .add-user-header {
+      background-color: #e9ecef; /* Цвет фона заголовка (как в кнопках Edit/Remove) */
+      padding: 15px;
+      margin-bottom: 20px; /* Отступ снизу, чтобы разделить с полями ввода */
+    }
+    .form-container {
+      border: 1px solid #ddd; /* Еле заметная граница */
+      background-color: #ffffff; /* Белый фон внутри границы */
+      padding: 20px;
+    }
+    .btn-submit {
+      display: block;
+      width: 11%; /* Уменьшаем кнопку в 3 раза относительно её текущей ширины */
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #28a745; /* Зеленая кнопка */
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-left: auto;
+      margin-right: auto; /* Выравнивание кнопки по центру */
+      border-radius: 10px; /* Скругляем углы кнопки */
+    }
+    .btn-submit:hover {
+      background-color: #218838; /* Тёмный зеленый при наведении */
+    }
+  </style>
 </head>
 <body>
-<h1>Admin, welcome spring boot security page!</h1>
-<a href="/logout">Logout</a>
-<div class="table-container">
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Surname</th>
-            <th>Email</th>
-            <th>Age</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.username}"></td>
-            <td th:text="${user.surname}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.age}"></td>
-            <td>
-                <span th:each="role : ${user.roles}" th:text="${role.name}"></span>
-            </td>
-            <td>
-                <a th:href="@{/admin/editUser(id=${user.id})}">Edit</a>
-                <a th:href="@{/admin/deleteUser(id=${user.id})}">Delete</a>
-            </td>
-        </tr>
-    </table>
+<nav class="navbar navbar-expand-lg navbar-dark-bg">
+  <div class="container-fluid">
+    <div>
+      <span class="navbar-text text-white">
+        <span th:text="${authenticatedEmail}">[email]</span> with roles:
+          <span th:each="role, stat : ${authenticatedRoles}" th:text="${stat.index > 0 ? ', ' + role : role}"></span>
+      </span>
+    </div>
+    <a class="logout-link" href="/logout">Logout</a>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Колонка с Admin и User -->
+    <div class="col-2 sidebar">
+      <a href="/admin" class="sidebar-item" th:classappend="${currentPage == 'admin' ? 'active' : ''}">Admin</a>
+      <a href="/user" class="sidebar-item" th:classappend="${currentPage == 'user' ? 'active' : ''}">User</a>
+    </div>
+
+
+
+    <!-- Основное содержимое -->
+    <div class="col-10 content-area">
+      <div class="content-container">
+        <h1>Admin Panel</h1>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users Table</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="new-user-tab" data-toggle="tab" href="#new-user" role="tab" aria-controls="new-user" aria-selected="false">New User</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <!-- Вкладка с пользователями -->
+          <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+            <h2>All Users</h2>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="user : ${users}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.surname}"></td>
+                <td th:text="${user.age}"></td>
+                <td th:text="${user.username}"></td>
+                <td>
+                  <span th:each="role : ${user.roles}" th:text="${role.name}"></span>
+                </td>
+                <td>
+                  <a th:href="javascript:void(0)" class="btn btn-primary" data-toggle="modal" data-target="#editUserModal${user.id}">Edit</a>
+                </td>
+                <td>
+                  <a th:href="javascript:void(0)" class="btn btn-danger" data-toggle="modal" data-target="#deleteUserModal${user.id}">Delete</a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Модальное окно для редактирования пользователя -->
+          <div th:each="user : ${users}">
+            <div class="modal fade" id="editUserModal${user.id}" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel${user.id}" aria-hidden="true">
+              <div class="modal-dialog" role="document" style="max-width: 80%; height: 75%;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel${user.id}">Edit User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form th:action="@{/admin/editUser(id=${user.id})}" th:object="${user}" method="post">
+                      <div class="form-group">
+                        <label for="id${user.id}">ID:</label>
+                        <input type="text" id="id${user.id}" th:field="*{id}" class="form-control" readonly/>
+                      </div>
+                      <div class="form-group">
+                        <label for="firstName${user.id}">First Name:</label>
+                        <input type="text" id="firstName${user.id}" th:field="*{name}" class="form-control" required/>
+                      </div>
+                      <div class="form-group">
+                        <label for="lastName${user.id}">Last Name:</label>
+                        <input type="text" id="lastName${user.id}" th:field="*{surname}" class="form-control" required/>
+                      </div>
+                      <div class="form-group">
+                        <label for="age${user.id}">Age:</label>
+                        <input type="number" id="age${user.id}" th:field="*{age}" class="form-control" required/>
+                      </div>
+                      <div class="form-group">
+                        <label for="email${user.id}">Email:</label>
+                        <input type="email" id="username${user.id}" th:field="*{username}" class="form-control" required/>
+                      </div>
+                      <div class="form-group">
+                        <label for="role${user.id}">Role:</label>
+                        <select id="role${user.id}" th:field="*{roles}" class="form-control">
+                          <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+                        </select>
+                      </div>
+                      <button type="button" class="btn btn-close" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-edit">Edit</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Модальное окно для удаления пользователя -->
+          <div th:each="user : ${users}">
+            <div class="modal fade" id="deleteUserModal${user.id}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel${user.id}" aria-hidden="true">
+              <div class="modal-dialog" role="document" style="max-width: 80%; height: 75%;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUserModalLabel${user.id}">Delete User</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form th:action="@{/admin/deleteUser(id=${user.id})}" th:object="${user}" method="post">
+                      <div class="form-group">
+                        <label for="id${user.id}">ID:</label>
+                        <input type="text" id="id${user.id}" th:field="*{id}" class="form-control" readonly style="background-color: #e9ecef; color: #495057;"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="firstName${user.id}">First Name:</label>
+                        <input type="text" id="firstName${user.id}" th:field="*{name}" class="form-control" readonly style="background-color: #e9ecef; color: #495057;"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="lastName${user.id}">Last Name:</label>
+                        <input type="text" id="lastName${user.id}" th:field="*{surname}" class="form-control" readonly style="background-color: #e9ecef; color: #495057;"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="age${user.id}">Age:</label>
+                        <input type="number" id="age${user.id}" th:field="*{age}" class="form-control" readonly style="background-color: #e9ecef; color: #495057;"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="email${user.id}">Email:</label>
+                        <input type="email" id="email${user.id}" th:field="*{username}" class="form-control" readonly style="background-color: #e9ecef; color: #495057;"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="role${user.id}">Role:</label>
+                        <select id="role${user.id}" th:field="*{roles}" class="form-control" disabled style="background-color: #e9ecef; color: #495057;">
+                          <option th:each="role : ${roles}" th:value="${role.name}" th:text="${role.name}"></option>
+                        </select>
+                      </div>
+                      <div class="text-center mt-4">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Вкладка с добавлением нового пользователя -->
+          <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="new-user-tab">
+            <div class="form-container">
+              <div class="add-user-header">
+                <h2>Add New User</h2>
+              </div>
+              <form action="/admin/saveUser" method="post">
+                <div class="form-group">
+                  <label for="firstName">First Name:</label>
+                  <input type="text" name="name" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Last Name:</label>
+                  <input type="text" name="surname" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                  <label for="age">Age:</label>
+                  <input type="number" name="age" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email:</label>
+                  <input type="email" name="email" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                  <label for="role">Role:</label>
+                  <select name="roles" class="form-control">
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER">USER</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-submit">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
