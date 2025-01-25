@@ -8,6 +8,6 @@ import java.util.*;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
-    List<User> findAll();
+    @Query("select u from User u join fetch u.roles where u.username = :username")
+    Optional<User> findUserAndFetchRoles(String username);
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.*;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,16 @@ public class User implements UserDetails {
     @JoinTable(name = "user_roles1",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles=new HashSet<>();
+    public User() {}
+
+    public User(String username, String name, String surname, Integer age, String password) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.age = age;
+        this.password = password;
+    }
 
     public String getName() {
         return name;
@@ -103,10 +113,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
 
+    public boolean hasRole(String roleName) {
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+                .anyMatch(role -> role.getName().equals(roleName));
     }
 
     @Override

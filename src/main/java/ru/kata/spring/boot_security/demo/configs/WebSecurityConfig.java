@@ -42,15 +42,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll();
     }
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+    @Bean // Определение BCryptPasswordEncoder как бина
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setPasswordEncoder(passwordEncoder());
-        authProvider.setUserDetailsService(userDetailsService);
-        return authProvider;
-    }
+
 }
+
+
