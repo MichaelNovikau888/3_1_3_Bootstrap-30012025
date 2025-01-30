@@ -18,7 +18,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password")
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Column(name = "age")
     private Integer age;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles1",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
