@@ -8,6 +8,7 @@ import java.util.*;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select u from User u join fetch u.roles where u.username = :username")
-    Optional<User> findUserAndFetchRoles(String username);
+    @Query("select u from User u join fetch u.roles where u.email = :email")
+    Optional<User> findUserAndFetchRoles(String email);
+
 }

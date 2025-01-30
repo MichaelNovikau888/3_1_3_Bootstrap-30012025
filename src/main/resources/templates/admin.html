@@ -173,7 +173,7 @@
             <label class="form-label mt-3 mb-0" for="editUsername"><strong>Email</strong></label>
             <input class="form-control" id="editUsername" type="email" name="username" required>
             <label class="form-label mt-3 mb-0" for="editPassword"><strong>Password</strong></label>
-            <input class="form-control" id="editPassword" type="password" name="rawPassword">
+            <input class="form-control" id="editPassword" type="password" name="password">
             <label class="form-label mt-3 mb-0" for="editRoles"><strong>Role</strong></label>
             <select class="form-select" id="editRoles" name="roles" multiple th:size="${#sets.size(allRoles)}" required>
               <option th:each="role: ${allRoles}" th:value="${role.id}" th:text="${#strings.substringAfter(role.name, 'ROLE_')}"></option>
@@ -243,6 +243,7 @@
     userEdit.querySelector('.modal-body input[id="editSurname"]').value = button.getAttribute('data-bs-surname')
     userEdit.querySelector('.modal-body input[id="editAge"]').value = button.getAttribute('data-bs-age')
     userEdit.querySelector('.modal-body input[id="editUsername"]').value = button.getAttribute('data-bs-username')
+    userEdit.querySelector('.modal-body input[id="editPassword"]').value = button.getAttribute('data-bs-password')
     console.log("Email: ", button.getAttribute('data-bs-username'));
 
 

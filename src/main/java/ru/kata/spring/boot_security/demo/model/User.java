@@ -1,12 +1,12 @@
 package ru.kata.spring.boot_security.demo.model;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,7 +19,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "username", unique = true, nullable = false)
-    private String username;
+    private String email;
 
     @Column(name = "password")
     private String password;
@@ -40,8 +40,8 @@ public class User implements UserDetails {
     private Set<Role> roles=new HashSet<>();
     public User() {}
 
-    public User(String username, String name, String surname, Integer age, String password) {
-        this.username = username;
+    public User(String email, String name, String surname, Integer age, String password) {
+        this.email = email;
         this.name = name;
         this.surname = surname;
         this.age = age;
@@ -56,7 +56,6 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -67,19 +66,20 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String email) {
+        this.email = email;
     }
 
-
+    public String getEmail() {
+        return email;
+    }
 
     public String getPassword() {
         return password;
     }
-
 
     public void setPassword(String password) {
         this.password = password;
@@ -92,8 +92,6 @@ public class User implements UserDetails {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-
-
 
     public Integer getAge() {
         return age;
@@ -109,6 +107,10 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
     }
 
     @Override
@@ -139,5 +141,28 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + name + '\'' +
+                ", lastName='" + surname + '\'' +
+                ", age=" + age +
+                '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email);
     }
 }
