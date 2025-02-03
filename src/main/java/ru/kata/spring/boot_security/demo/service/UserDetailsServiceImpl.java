@@ -28,8 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findUserAndFetchRoles(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username [" + username +
-                        "] не найден в БД"));
+        User user = userRepository.findUserAndFetchRoles(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return user;
     }
 }
