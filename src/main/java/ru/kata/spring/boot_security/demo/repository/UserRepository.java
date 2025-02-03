@@ -9,8 +9,7 @@ import java.util.*;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-  //  @EntityGraph(attributePaths = {"roles"})
-  @Query("select u from User u join fetch u.roles where u.email = :email")
+   @Query("select u from User u join fetch u.roles where u.email = :email")
     Optional<User> findUserAndFetchRoles( String email);
     @Query("SELECT u FROM User u JOIN FETCH u.roles ORDER BY u.id ASC")
     List<User> findAllWithRoles();
